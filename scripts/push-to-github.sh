@@ -89,10 +89,6 @@ if [[ -f ".env" ]]; then
 fi
 
 GITHUB_TOKEN="${GITHUB_TOKEN:-${GITHUB_API_KEY:-}}"
-if [[ -z "${GITHUB_TOKEN}" ]]; then
-  echo "[push:github] ERROR: Missing GITHUB_TOKEN (or GITHUB_API_KEY) in environment/.env"
-  exit 1
-fi
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "[push:github] ERROR: Current directory is not a git repository"
@@ -117,8 +113,18 @@ if [[ "$DRY_RUN" == "true" ]]; then
   fi
   echo "[push:github] Would set git identity: ${GIT_USER_NAME} <${GIT_USER_EMAIL}>"
   echo "[push:github] Would set remote: origin -> $REPO_URL"
-  echo "[push:github] Would run: git -c http.extraheader='<redacted>' push $REPO_URL HEAD:$TARGET_BRANCH"
+  if [[ -n "${GITHUB_TOKEN}" ]]; then
+    echo "[push:github] Would run: git -c http.extraheader='<redacted>' push $REPO_URL HEAD:$TARGET_BRANCH"
+  else
+    echo "[push:github] Would run: git push $REPO_URL HEAD:$TARGET_BRANCH"
+    echo "[push:github] NOTE: Set GITHUB_TOKEN for non-interactive auth."
+  fi
   exit 0
+fi
+
+if [[ -z "${GITHUB_TOKEN}" ]]; then
+  echo "[push:github] ERROR: Missing GITHUB_TOKEN (or GITHUB_API_KEY) in environment/.env"
+  exit 1
 fi
 
 if [[ "$SKIP_COMMIT" != "true" ]]; then
@@ -140,4 +146,3 @@ echo "[push:github] Pushing HEAD to $REPO_URL ($TARGET_BRANCH)..."
 git -c http.extraheader="$AUTH_HEADER" push "$REPO_URL" "HEAD:$TARGET_BRANCH"
 
 echo "[push:github] Push complete."
-
