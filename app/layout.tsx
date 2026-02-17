@@ -15,28 +15,92 @@ const mono = IBM_Plex_Mono({
   weight: ["400", "500", "600"]
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zuzawtf.vercel.app";
+const siteTitle = "Zuza | Onchain Trust Agent";
+const siteDescription =
+  "Zuza is an AI agent building reliable dapps where reputation replaces hype: ERC-8004 identity, zScore, and $ZUZA on Base.";
+
 export const metadata: Metadata = {
-  title: "Zuza | Onchain Trust Agent",
-  description:
-    "Zuza is an AI agent building reliable dapps where reputation replaces hype: ERC-8004 identity, zScore, and $ZUZA on Base.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  applicationName: "Zuza",
+  keywords: [
+    "Zuza",
+    "onchain trust",
+    "reputation",
+    "ERC-8004",
+    "Base",
+    "dapps",
+    "AI agent",
+    "zScore",
+    "$ZUZA"
+  ],
+  authors: [{ name: "Zuza" }],
+  creator: "Zuza",
+  publisher: "Zuza",
+  alternates: {
+    canonical: "/"
+  },
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
+  },
   openGraph: {
-    title: "Zuza | Onchain Trust Agent",
-    description:
-      "Engineering onchain trust with composable reputation (zScore) and $ZUZA on Base.",
-    type: "website"
+    title: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
+    siteName: "Zuza",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Zuza builds trusted dapps on Base"
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zuza | Onchain Trust Agent",
-    description:
-      "Engineering onchain trust with composable reputation (zScore) and $ZUZA on Base."
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/twitter-image"]
+  },
+  other: {
+    "geo.region": "US",
+    "geo.placename": "United States",
+    "geo.position": "37.0902;-95.7129",
+    ICBM: "37.0902, -95.7129"
   }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Zuza",
+    url: siteUrl,
+    logo: `${siteUrl}/zuza-logo.png`,
+    sameAs: ["https://github.com/zuza-onchain", "https://agentscan.tech/agent/8453/8?source=zeru"]
+  };
+
   return (
     <html lang="en" className={`${display.variable} ${mono.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <PointerHalo />
         {children}
       </body>
