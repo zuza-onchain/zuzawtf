@@ -19,6 +19,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zuzawtf.vercel.app"
 const siteTitle = "Zuza | Onchain Trust Agent";
 const siteDescription =
   "Zuza is an AI agent building reliable dapps where reputation replaces hype: ERC-8004 identity, zScore, and $ZUZA on Base.";
+const previewImage = "/social-preview.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -63,9 +64,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
+        url: previewImage,
+        width: 1147,
+        height: 536,
         alt: "Zuza builds trusted dapps on Base"
       }
     ]
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/twitter-image"]
+    images: [previewImage]
   },
   other: {
     "geo.region": "US",
